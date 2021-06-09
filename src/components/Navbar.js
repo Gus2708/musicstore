@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
             'Noto Sans JP',
             'serif'],
         fontWeight: '500',
-        marginBottom: '.7rem'
+        whiteSpace: 'nowrap'
 
     },
 
@@ -117,16 +117,28 @@ export default function Navbar() {
     <div className={classes.root}>
       <AppBar className={classes.appBar} position="fixed">
         <Toolbar>
+          <Link to="/" 
+          style={{  textDecoration: 'none',
+                    flexGrow: 1,
+                    color: '#383B56',
+                    fontSize: "2rem",
+                    fontFamily: [
+                      'Noto Sans JP',
+                      'serif'],
+                    fontWeight: '500',
+                    marginBottom: '.7rem',
+                    whiteSpace: 'nowrap'}}>
             <Typography className={classes.logo} variant="h1" color="initial">
                 Music <i className={classes.store}>Store</i><i className={classes.point}>.</i>
             </Typography>         
+          </Link>
             <Typography variant="h6" commponent="p" color='textPrimary'>
                 Hello {user ? user.email : 'Guest'}
             </Typography>
-            <Link to='/signin'>
+            <Link to='/signin' style={{ textDecoration: 'none' }}>
               <Button onClick={handleauth} className={classes.login} color="inherit">{user ? "Sign out": "Sign In"}</Button>
             </Link>
-            <Link to="/checkoutPage">
+            <Link to="/checkoutPage" >
               <IconButton aria-label="Show items in cart" color='inherit'>
                   <ThemeProvider theme={theme}> 
                   <Badge badgeContent={basket?.length} color='secondary'>

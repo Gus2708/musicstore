@@ -11,12 +11,17 @@ import Trash from '@material-ui/icons/Delete';
 import accounting from 'accounting';
 import {useStateValue} from "../StateProvider";
 import { actionTypes } from '../Reducer';
+import { Star } from '@material-ui/icons';
+import { BeakerIcon } from '@heroicons/react/solid'
 
 
 const useStyles = makeStyles((theme) => ({
   root: { 
     maxWidth: 345,
     
+  },
+  star: {
+    color: '#ffc72c'
   },
   action: {
       marginTop: "1rem",
@@ -77,7 +82,7 @@ export default function CheckoutCard({product : {id, name, price, rating, image,
             {Array(rating) 
             .fill()
             .map((_, i) => (
-                <p>&#11088;</p>
+              <Star className={classes.star}></Star>
             ))}
         </div>
         <IconButton aria-label="Delete" onClick={removeItem}>

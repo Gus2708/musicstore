@@ -1,8 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
 import Paper from '@material-ui/core/Paper';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
@@ -15,6 +13,7 @@ import PaymentForm from './PaymentForm';
 import Review from './Review';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
+import { Link as RouterLink } from "react-router-dom";
 
 function Copyright() {
   return (
@@ -131,7 +130,13 @@ export default function Checkout() {
                 <Typography variant="subtitle1">
                   Your order number is #2001539. We have emailed your order confirmation, and will
                   send you an update when your order has shipped.
+                  <RouterLink to='/'>
+                    <Button variant="outlined" color="default">
+                    Homepage
+                    </Button>
+                </RouterLink>
                 </Typography>
+                
               </React.Fragment>
             ) : (
               <React.Fragment>

@@ -47,7 +47,7 @@ export default function Total() {
             <h5>Total items: {basket?.length}</h5>
             <h5 className={classes.money}>{accounting.formatMoney(getBasketTotal(basket))}</h5>
             <ThemeProvider theme={theme}>
-            <Link to="/checkout">
+            <Link to="/checkout" style={{ textDecoration: 'none' }}>
                 <Button className={classes.button} variant="contained" color="secondary">
                 Check Out
                 </Button>

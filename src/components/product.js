@@ -10,10 +10,11 @@ import Collapse from '@material-ui/core/Collapse';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { AddShoppingCart } from '@material-ui/icons';
+import { AddShoppingCart, Star } from '@material-ui/icons';
 import accounting from 'accounting';
 import { actionTypes } from '../Reducer';
-import {useStateValue} from "../StateProvider"
+import {useStateValue} from "../StateProvider";
+
 
 
 
@@ -21,6 +22,9 @@ const useStyles = makeStyles((theme) => ({
   root: { 
     maxWidth: 345,
     
+  },
+  star: {
+    color: '#ffc72c'
   },
   action: {
       marginTop: "1rem",
@@ -96,12 +100,12 @@ export default function Product({product : {id, name, price, rating, image, desc
       </CardContent>
       <CardActions disableSpacing>
         <IconButton aria-label="add to cart" onClick={addToBasket}>
-            <AddShoppingCart fontSize='large'></AddShoppingCart>
+        <AddShoppingCart ></AddShoppingCart>
         </IconButton>
         {Array(rating) 
         .fill()
         .map((_, i) => (
-            <p>&#11088;</p>
+           <Star className={classes.star}></Star>
         ))}
         <IconButton
           className={clsx(classes.expand, {
