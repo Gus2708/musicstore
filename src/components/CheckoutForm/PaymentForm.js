@@ -1,49 +1,74 @@
-import React from 'react';
-import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
+import { Button, Card, Divider, Typography } from "@material-ui/core";
+import Review from "./Review";
+import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import {useStateValue} from "../../StateProvider";
+import {getBasketTotal} from "../../Reducer";   
+import accounting from 'accounting';
+import axios from "axios";
 
-export default function PaymentForm() {
+
+const CheckoutForm = ({backStep, nextStep}) => {
+  const [ {basket}, dispatch] = useStateValue();
+  const stripe = useStripe();
+  const elements = useElements();
+
+  const handleSubmit = async(e) => {
+    e.preventDefault();
+
+    const {error, paymentMethod} = await stripe.createPaymentMethod({
+      type: "card",
+      card: elements.getElement(CardElement)
+    });
+
+    if(!error){
+      const { id } = paymentMethod;
+      try {
+
+        const {data} = await axios.post("http://localhost:3001/api/checkout", {
+          id,
+          amount: getBasketTotal(basket)
+        })
+
+        console.log(data);     
+      }
+      catch (error) {
+        console.log(error);
+      }
+    };
+    
+  };
+
+  return(
+    <form onSubmit={handleSubmit}>
+      <CardElement></CardElement>
+      <div style={{display: "flex",
+                   justifyContent:"space-between",
+                   marginTop: "1.5rem"}}>
+        <Button onclick={backStep}>Back</Button>
+        <Button onclick={nextStep} variant="contained" type="submit" disabled={false} color="primary">Pay {accounting.formatMoney(getBasketTotal(basket))}</Button>
+      </div>
+
+    </form>
+  )
+};
+
+
+const stripePromise = loadStripe("pk_test_51J5Qv2IXbsEAIaUdbZaUA3FqKjAPv8BqWwoTDRPG9a0fiDXJoSpCwTsGC2PNcgwM9ORqc2r0DSOdL0znOvCLxPNN00MZMWWPoO");
+
+const PaymentForm = ({backStep, nextStep}) => {
   return (
-    <React.Fragment>
-      <Typography variant="h6" gutterBottom>
-        Payment method
-      </Typography>
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={6}>
-          <TextField required id="cardName" label="Name on card" fullWidth autoComplete="cc-name" />
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <TextField
-            required
-            id="cardNumber"
-            label="Card number"
-            fullWidth
-            autoComplete="cc-number"
-          />
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <TextField required id="expDate" label="Expiry date" fullWidth autoComplete="cc-exp" />
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <TextField
-            required
-            id="cvv"
-            label="CVV"
-            helperText="Last three digits on signature strip"
-            fullWidth
-            autoComplete="cc-csc"
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <FormControlLabel
-            control={<Checkbox color="secondary" name="saveCard" value="yes" />}
-            label="Remember credit card details for next time"
-          />
-        </Grid>
-      </Grid>
-    </React.Fragment>
-  );
+    <>
+      <Review></Review>
+      <Divider></Divider>
+      <Typography variant="h6" gutterBottom style={{margin: "20px 0"}}>Payment Method</Typography>
+      <Elements stripe={stripePromise}>
+        <CheckoutForm backStep={backStep} nextStep={nextStep}>
+
+        </CheckoutForm>
+      </Elements>
+    </>
+  )
 }
+
+export default PaymentForm

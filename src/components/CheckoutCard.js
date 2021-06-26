@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
     
   },
   star: {
-    color: '#ffc72c'
+    color: '#ffd60a'
   },
   action: {
       marginTop: "1rem",
