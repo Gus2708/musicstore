@@ -5,6 +5,8 @@ import AddressForm from "./AddressForm";
 import PaymentForm from "./PaymentForm";
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
+import Confirmation from "./Confirmation";
+import { useStateValue } from "../../StateProvider";
 
 const theme = createMuiTheme(
   {
@@ -22,9 +24,10 @@ const theme = createMuiTheme(
 const Checkout = () => {
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(0);
+  const [{paymentMessage}, dispatch] = useStateValue();
   const steps = ["Shipping adress", "Payment details"];
 
-  const Form = () => activeStep === 0 ? <AddressForm nextStep={nextStep} />: <PaymentForm/>
+  const Form = () => activeStep === 0 ? <AddressForm nextStep={nextStep} />: <PaymentForm nextStep={nextStep} backStep={backStep}/>
 
   const nextStep = () => setActiveStep((prevActiveStep) => prevActiveStep + 1);
   const backStep = () => setActiveStep((prevActiveStep) => prevActiveStep - 1);
@@ -44,7 +47,9 @@ const Checkout = () => {
               </Step>
             ))}
           </Stepper>
-          <Form/>
+              {
+                activeStep === steps.length ? (<Confirmation message={paymentMessage} />): (<Form/>)
+              }
         </Paper>
       </main>
     </ThemeProvider>
